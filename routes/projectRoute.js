@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Projects = require("../data/helpers/projectModel");
+const Actions = require("../data/helpers/actionModel");
 
 router.use(express.json());
 
@@ -111,6 +112,85 @@ router.get("/:id/actions", async (req, res) => {
     }
 });
 
+//GET action by ID request
+router.get("/:id/actions/:actionId", async (req, res) => {
+    try {
+        const action = await Actions.get(req.params.actionId);
 
+        if (action) {
+            res.status(200).json(action);
+        } else {
+            res
+                .status(404)
+                .json({ message: "The action with the specified ID does not exist." });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "The action information could not be retrieved."
+        });
+    }
+});
+
+// POST action request
+router.post("/:id/actions", async (req, res) => {
+    const actionInfo = { ...req.body, project_id: req.params.id };
+    try {
+        if (!req.body.description || !req.body.notes) {
+            res.status(400).json({
+                errorMessage: "Please provide the description and notes for the action."
+            });
+        } else {
+            const action = await Actions.insert(actionInfo);
+            res.status(201).json(action);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "There was an error while saving the action."
+        });
+    }
+});
+
+// DELETE action request
+router.delete("/:id/actions/:actionId", async (req, res) => {
+    try {
+        const count = await Actions.remove(req.params.actionId);
+        console.log("Count is ", count);
+        if (count > 0) {
+            res
+                .status(200)
+                .json({ message: "The action has been successfully deleted" });
+        } else {
+            res
+                .status(404)
+                .json({ message: "The action with the specified ID does not exist." });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "The action could not be deleted"
+        });
+    }
+});
+
+// UPDATE action request
+router.put("/:id/actions/:actionId", async (req, res) => {
+    try {
+        const action = await Actions.update(req.params.actionId, req.body);
+        if (action) {
+            res.status(200).json(action);
+        } else {
+            res
+                .status(404)
+                .json({ message: "The action with the specified ID does not exist." });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "The action information could not be modified."
+        });
+    }
+});
 
 module.exports = router;
