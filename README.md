@@ -26,13 +26,23 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+=> I learned routing in express and how to write middleware.
+
 - [ ] Describe Middleware?
+
+=> Middleware is a framework that adds more functionality to our application that can extend the features provided by the express framework.
 
 - [ ] Describe a Resource?
 
+=> Resource is a source of information that we can get from the database.
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+=> The API can return HTTP status code such as status code 200 (ok) or status code 201 (created) for successful request.
+
 - [ ] How can we partition our application into sub-applications?
+
+=> We can partition our application into sub-application by using express routers.
 
 ## Project Setup
 
