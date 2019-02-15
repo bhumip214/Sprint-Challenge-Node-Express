@@ -98,4 +98,19 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+//GET project actions request
+router.get("/:id/actions", async (req, res) => {
+    try {
+        const actions = await Projects.getProjectActions(req.params.id);
+        res.status(200).json(actions);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "The actions information for a project could not be retrieved."
+        });
+    }
+});
+
+
+
 module.exports = router;
