@@ -5,6 +5,17 @@ const Actions = require("../data/helpers/actionModel");
 
 router.use(express.json());
 
+const charlimit = (req, res, next) => {
+    const description = req.body.description;
+    if (description.length <= 128) {
+        next();
+    } else {
+        res
+            .status(400)
+            .json({ message: "Description must be 128 characters or less." });
+    }
+};
+
 // GET projects request
 router.get("/", async (req, res) => {
     try {
@@ -133,7 +144,7 @@ router.get("/:id/actions/:actionId", async (req, res) => {
 });
 
 // POST action request
-router.post("/:id/actions", async (req, res) => {
+router.post("/:id/actions", charlimit, async (req, res) => {
     const actionInfo = { ...req.body, project_id: req.params.id };
     try {
         if (!req.body.description || !req.body.notes) {
